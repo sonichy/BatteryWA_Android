@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="60dp"
+    android:layout_height="60dp" >
+
+    <ImageView
+        android:id="@+id/monitor_widget_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:src="@drawable/stat_sys_battery_unknown" />
+
+    <ImageView
+        android:id="@+id/chargeico"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:src="@drawable/charge" />
+
+</RelativeLayout>
