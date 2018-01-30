@@ -7,12 +7,14 @@
         android:id="@+id/monitor_widget_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:src="@drawable/stat_sys_battery_unknown" />
+        android:src="@drawable/stat_sys_battery_unknown"
+        />
 
     <ImageView
         android:id="@+id/chargeico"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:src="@drawable/charge" />
+        android:src="@drawable/charge"
+        />
 
 </RelativeLayout>

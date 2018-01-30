@@ -8,14 +8,14 @@
     	android:layout_width="wrap_content"
     	android:layout_height="fill_parent">
  
-    <com.hy.batterywa.MyView
+    <com.hty.batterymonitor.MyView
 	    android:id="@+id/myview"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"/>    
   
  </HorizontalScrollView>
 	
-	<com.hy.batterywa.MyViewZB
+	<com.hty.batterymonitor.MyViewZB
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"/>
 	

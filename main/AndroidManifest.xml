@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.hy.batterywa"
+    package="com.hty.batterymonitor"
     android:versionCode="7"
-    android:versionName="7.4" >
+    android:versionName="7.5" >
     <uses-sdk
-        android:minSdkVersion="16"
+        android:minSdkVersion="11"
         android:targetSdkVersion="16"/>
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:label="海天鹰电量监控"
+        android:theme="@android:style/Theme.Holo" >
         <activity
-            android:name=".BatteryMonitor"
-            android:label="@string/app_name"
+            android:name="com.hty.batterymonitor.BatteryMonitor"
+            android:label="海天鹰电量监控"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:label="电量监控" 
+            android:name="com.hty.batterymonitor.MainActivity"
+            android:label="海天鹰电量监控 - 实时数据"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -27,22 +27,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>        
         </activity>
-        <activity
-            android:name=".AboutActivity"
-            android:label="电量监控"
+  	    <activity
+            android:name="com.hty.batterymonitor.BatteryRecord"
+            android:label="海天鹰电量监控 - 历史数据"
             android:launchMode="singleTask" />
   	    <activity
-            android:name=".BatteryRecord"
-            android:label="电量监控"
-            android:launchMode="singleTask" />
-  	    <activity
-            android:name=".BatteryCanvas"
-            android:label="电量监控"
+            android:name="com.hty.batterymonitor.BatteryCanvas"
+            android:label="海天鹰电量监控 - 电量曲线"
             android:launchMode="standard"
             android:screenOrientation="portrait"/>
-        <service android:enabled="true" android:name=".BatteryService" />        
-        <service android:name=".WidgetService" android:enabled="true" />
-        <receiver android:name=".WidgetProvider" >
+        <service android:enabled="true" android:name="com.hty.batterymonitor.BatteryService" />
+        <service android:name="com.hty.batterymonitor.WidgetService" android:enabled="true" />
+        <receiver android:name="com.hty.batterymonitor.WidgetProvider" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.intent.action.BATTERY_CHANGED" />
