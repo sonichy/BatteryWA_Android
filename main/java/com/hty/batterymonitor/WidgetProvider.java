@@ -30,9 +30,12 @@ public class WidgetProvider extends AppWidgetProvider {
 		}
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 		context.startService(new Intent(context, WidgetService.class));
-		// 重启服务尝试，防内存不足被杀死
-		if (!isServiceRunning(context, "com.hy.batterywa.BatteryService")) {
+		// 如果服务不存在则重启服务，应对内存不足被杀死
+		if (!isServiceRunning(context, "com.hty.batterymonitor.BatteryService")) {
 			context.startService(new Intent(context, BatteryService.class));
+		}
+		if (!isServiceRunning(context, "com.hty.batterymonitor.WidgetService")) {
+			context.startService(new Intent(context, WidgetService.class));
 		}
 	}
 
@@ -49,8 +52,7 @@ public class WidgetProvider extends AppWidgetProvider {
 			return false;
 		}
 		for (int i = 0; i < serviceList.size(); i++) {
-			// Log.e("WidgetProvider",
-			// serviceList.get(i).service.getClassName());
+			// Log.e("WidgetProvider", serviceList.get(i).service.getClassName());
 			if (serviceList.get(i).service.getClassName().equals(className) == true) {
 				isRunning = true;
 				break;

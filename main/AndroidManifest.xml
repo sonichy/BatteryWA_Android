@@ -3,23 +3,27 @@
     package="com.hty.batterymonitor"
     android:versionCode="7"
     android:versionName="7.5" >
+
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="16"/>
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="海天鹰电量监控"
         android:theme="@android:style/Theme.Holo" >
+        <!--
         <activity
             android:name="com.hty.batterymonitor.BatteryMonitor"
             android:label="海天鹰电量监控"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
         </activity>
+        -->
         <activity
             android:name="com.hty.batterymonitor.MainActivity"
-            android:label="海天鹰电量监控 - 实时数据"
+            android:label="海天鹰电量监控"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
             <intent-filter>
