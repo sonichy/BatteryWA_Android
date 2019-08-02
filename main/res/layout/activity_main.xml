@@ -8,6 +8,7 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="5sp"
         android:text="电量："
         android:textColor="#ffffff"
         android:textSize="14dp"/>
@@ -16,8 +17,9 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
         android:layout_below="@+id/textView1"
+        android:layout_alignLeft="@+id/textView1"
+        android:paddingLeft="5sp"
         android:text="充电计时："
         android:textColor="#ffffff"
         android:textSize="14dp"/>

@@ -27,22 +27,20 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.BitmapFactory;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 public class BatteryService extends Service {
-	int pluggedlast = 0, plugged, statuslast = -1, i = 0, cp, level0 = 0, level1 = 0, level2 = 0, lbs, le,
-			lcs, lce, level;
+    final String fp = "/sys/class/power_supply/battery/";
+	int pluggedlast = 0, plugged, statuslast = -1, i = 0, cp, level0 = 0, level1 = 0, level2 = 0, lbs, le, lcs, lce, level;
 	Date date, CST, CET, CFT, BCT, BST, BET, time0, time1;
 	long duration, CFD, BD, it0, tt0, uptime, BD1;
 	boolean paused = true;
-	String SCST = "", SCET = "", SCFT = "", SCFD = "", SD, s = "电量：", s1 = "充电计时：", SBD = "", SBST = "",
-			CPUs, stemperature, FPBST = "data/data/com.hty.batterymonitor/files/BST", SBP = "", SBET = "",
-			SBFT = "";
+	String SCST = "", SCET = "", SCFT = "", SCFD = "", SD, s = "电量：", s1 = "充电计时：", SBD = "", SBST = "",	CPUs, stemperature, FPBST = "data/data/com.hty.batterymonitor/files/BST", SBP = "", SBET = "", SBFT = "";
 	SimpleDateFormat dateformat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
 	SimpleDateFormat timeformat = new SimpleDateFormat("H时m分s秒");
 	SimpleDateFormat timeformat1 = new SimpleDateFormat("HH:mm");
@@ -117,16 +115,15 @@ public class BatteryService extends Service {
 			int current = 0;
 			String technology = intent.getStringExtra("technology");
 			plugged = intent.getIntExtra("plugged", 0);
+            int BPCN = 0;
 			if (Build.VERSION.SDK_INT > 20) {
 				BatteryManager bm = (BatteryManager) getSystemService(Context.BATTERY_SERVICE);
 				int BPC = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
 				int BPCC = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER);
 				int BPCA = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_AVERAGE);
-				int BPCN = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW);
+				BPCN = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW);
 				int BPEC = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_ENERGY_COUNTER);
-				SBP = "\nBATTERY_PROPERTY_CAPACITY:" + BPC + "\nBATTERY_PROPERTY_CHARGE_COUNTER:" + BPCC
-						+ "\nBATTERY_PROPERTY_CURRENT_AVERAGE:" + BPCA + "\nBATTERY_PROPERTY_CURRENT_NOW:"
-						+ BPCN + "\nBATTERY_PROPERTY_ENERGY_COUNTER:" + BPEC;
+				SBP = "\nBATTERY_PROPERTY_CAPACITY:" + BPC + "\nBATTERY_PROPERTY_CHARGE_COUNTER:" + BPCC + "\nBATTERY_PROPERTY_CURRENT_AVERAGE:" + BPCA + "\nBATTERY_PROPERTY_CURRENT_NOW:" + BPCN + "\nBATTERY_PROPERTY_ENERGY_COUNTER:" + BPEC;
 			}
 			String statusString = "";
 			date = new Date();
@@ -202,51 +199,64 @@ public class BatteryService extends Service {
 			}
 
 			// 电流
-			String scurrent = "";
-			File f;
-			String fp = "/sys/class/power_supply/battery/";
-			String fn;
-			fn = fp + "BatteryAverageCurrent";// 红米1，金立GN205，佳域G3
-			f = new File(fn);
-			if (f.exists()) {
-				scurrent = ReadFile(fn);
-			} else {
-				fn = fp + "batt_fuel_current";// 三星I8262D
-				f = new File(fn);
-				if (f.exists()) {
-					scurrent = ReadFile(fn);
-				} else {
-					fn = fp + "batt_current";// HTC X315e
-					f = new File(fn);
-					if (f.exists()) {
-						scurrent = ReadFile(fn);
-					} else {
-						fn = fp + "current_now";
-						f = new File(fn);
-						if (f.exists()) {
-							// NOTE8702
-							// String c = ReadFile(fn);
-							// scurrent = c.substring(0, c.length() - 3);
-							// ZTE N958St
-							scurrent = ReadFile(fn);
-						} else {
-							scurrent = "0";
-						}
-					}
-				}
-			}
-			current = Integer.parseInt(scurrent);
+            if(BPCN == 0) {
+                String scurrent = "0";
+                String fn = fp + "BatteryAverageCurrent";   // 红米1，金立GN205，佳域G3
+                File f = new File(fn);
+                if (f.exists()) {
+                    scurrent = ReadFile(fn);
+                } else {
+                    fn = fp + "batt_fuel_current";// 三星I8262D
+                    f = new File(fn);
+                    if (f.exists()) {
+                        scurrent = ReadFile(fn);
+                    } else {
+                        fn = fp + "batt_current";// HTC X315e
+                        f = new File(fn);
+                        if (f.exists()) {
+                            scurrent = ReadFile(fn);
+                        } else {    //MIUI7
+                            fn = fp + "current_now";
+                            f = new File(fn);
+                            if (f.exists()) {
+                                // NOTE8702
+                                // String c = ReadFile(fn);
+                                // scurrent = c.substring(0, c.length() - 3);
+                                // ZTE N958St
+                                scurrent = ReadFile(fn);
+                            }
+                        }
+                    }
+                }
+                if (scurrent == null) {
+                    scurrent = "0";
+                } else {
+                    Log.e("电流", fn + ": " + scurrent);
+                }
+                current = Integer.parseInt(scurrent);
+            }else{
+			    current = BPCN;
+            }
+            Log.e(Thread.currentThread().getStackTrace()[2] + "", "current_raw(" + current + ")");
+            if (current>3000 || current <-3000) {
+                current /= 1000;
+                Log.e(Thread.currentThread().getStackTrace()[2] + "", "current_fix(" + current + ")");
+            }
+
 			// 电量
 			String rls = "";
-			fn = fp + "charge_full_design";// 红米1
-			f = new File(fn);
+			String fn = fp + "/charge_full_design";// 红米1
+			File f = new File(fn);
+            Log.e("电量", fn + ": " + String.valueOf(f.exists()));
 			if (f.exists()) {
 				String cfdm = ReadFile(fn);
-				// Log.e("mAh", cfdm);
-				String cfd = cfdm.substring(0, cfdm.length() - 3);
-				int cfdi = Integer.parseInt(cfd);
-				int rln = cfdi * level / 100;
-				rls = rln + "/" + cfd + "mAh";
+				if(cfdm != null) {
+                    Log.e("电量", cfdm);
+                    String cfd = cfdm.substring(0, cfdm.length() - 3);
+                    int cfdi = Integer.parseInt(cfd);
+                    int rln = cfdi * level / 100;
+                    rls = rln + "/" + cfd + "mAh";
+                }
 			}
 
 			String healthString = "";
@@ -373,15 +383,16 @@ public class BatteryService extends Service {
 	}
 
 	private void showNotification(int level, String contentTitle, CharSequence contentText) {
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-				.setSmallIcon(MainApplication.batteryStateIcon[level])
-				.setContentTitle(level + "% " + contentTitle).setContentText(contentText);
+		Notification.Builder mBuilder = new Notification.Builder(this)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.ic_launcher))
+                .setSmallIcon(MainApplication.batteryStateIcon[level])
+				.setContentTitle(level + "% " + contentTitle)
+                .setContentText(contentText);
 		Intent resultIntent = new Intent(this, MainActivity.class);
-		PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent,
-				PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		mBuilder.setContentIntent(resultPendingIntent);
 		NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		Notification notification = mBuilder.build();
+		Notification notification = mBuilder.getNotification();
 		notification.flags = Notification.FLAG_NO_CLEAR;
 		mNotifyMgr.notify(0, notification);
 	}
@@ -398,10 +409,9 @@ public class BatteryService extends Service {
 	}
 
 	String ReadFile(String fp) {
-		String s = "";
+		String s = "0";
 		try {
-			s = new BufferedReader(new InputStreamReader(Runtime.getRuntime()
-					.exec(new String[] { "cat", fp }).getInputStream())).readLine();
+			s = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec(new String[] { "cat", fp }).getInputStream())).readLine();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

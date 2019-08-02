@@ -20,10 +20,8 @@ public class BatteryRecord extends Activity {
 		final DBHelper helper = new DBHelper(this);
 		Cursor c = helper.query();
 		String[] from = { "time", "level", "voltage", "current", "temperature" };
-		int[] to = { R.id.textView1, R.id.textView2, R.id.textView3,
-				R.id.textView4, R.id.textView5 };
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-				R.layout.battery_record_row, c, from, to);
+		int[] to = { R.id.textView1, R.id.textView2, R.id.textView3, R.id.textView4, R.id.textView5 };
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,	R.layout.battery_record_row, c, from, to);
 		adapter.setViewBinder(viewBinder);
 		ListView listView = (ListView) this.findViewById(R.id.listView1);
 		listView.setAdapter(adapter);

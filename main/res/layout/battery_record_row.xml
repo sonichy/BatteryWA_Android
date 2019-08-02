@@ -8,51 +8,56 @@
 
     <TextView
         android:id="@+id/textView1"
-        android:layout_width="166sp"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:singleLine="true"
         android:text="2014年12月25日 00:00:00"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:textSize="14dp"/>
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="28sp"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="1sp"
         android:layout_marginRight="1sp"
         android:gravity="right"
         android:singleLine="true"
         android:text="100"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:textSize="14dp"/>
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="38sp"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="1sp"
         android:gravity="center"
         android:singleLine="true"
         android:text="4000"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:textSize="14dp"/>
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="37sp"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:gravity="right"
         android:singleLine="true"
         android:text="-500"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:textSize="14dp"/>
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="30sp"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4sp"
         android:gravity="right"
         android:singleLine="true"
         android:text="20.0"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:textSize="14dp"/>
 
 </LinearLayout>

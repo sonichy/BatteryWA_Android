@@ -35,14 +35,14 @@ public class DBHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// db.execSQL("DROP TABLE IF EXISTS battery");
 		// onCreate(db);
-		switch (newVersion) {
-		case 6:
-			db.execSQL("alter table battery rename to battery_temp");
-			db.execSQL("CREATE TABLE battery (_id INTEGER PRIMARY KEY ,time TEXT,level INTEGER, voltage INTEGER, current INTEGER , temperature INTEGER, cpu INTEGER)");
-			db.execSQL("insert into battery select *,'' from battery_temp");
-			db.execSQL("drop table battery_temp");
-			break;
-		}
+//		switch (newVersion) {
+//		case 6:
+//			db.execSQL("alter table battery rename to battery_temp");
+//			db.execSQL("CREATE TABLE battery (_id INTEGER PRIMARY KEY ,time TEXT,level INTEGER, voltage INTEGER, current INTEGER , temperature INTEGER, cpu INTEGER)");
+//			db.execSQL("insert into battery select *,'' from battery_temp");
+//			db.execSQL("drop table battery_temp");
+//			break;
+//		}
 	}
 
 	public void insert(ContentValues values) {
@@ -54,8 +54,7 @@ public class DBHelper extends SQLiteOpenHelper {
 	public Cursor query() {
 		SQLiteDatabase db = getWritableDatabase();
 		// db.execSQL("delete from battery where not in (select * from battery order by _id desc limit 0,10000)");
-		Cursor c = db
-				.query(TableName, null, null, null, null, null, "_id desc");
+		Cursor c = db.query(TableName, null, null, null, null, null, "_id desc");
 		return c;
 	}
 

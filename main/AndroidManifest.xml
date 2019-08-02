@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hty.batterymonitor"
     android:versionCode="7"
-    android:versionName="7.5" >
+    android:versionName="7.7" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -13,16 +13,9 @@
         android:icon="@drawable/ic_launcher"
         android:label="海天鹰电量监控"
         android:theme="@android:style/Theme.Holo" >
-        <!--
+
         <activity
-            android:name="com.hty.batterymonitor.BatteryMonitor"
-            android:label="海天鹰电量监控"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" >
-        </activity>
-        -->
-        <activity
-            android:name="com.hty.batterymonitor.MainActivity"
+            android:name=".MainActivity"
             android:label="海天鹰电量监控"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
@@ -31,18 +24,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>        
         </activity>
+
   	    <activity
-            android:name="com.hty.batterymonitor.BatteryRecord"
+            android:name=".BatteryRecord"
             android:label="海天鹰电量监控 - 历史数据"
             android:launchMode="singleTask" />
+
   	    <activity
-            android:name="com.hty.batterymonitor.BatteryCanvas"
+            android:name=".BatteryCanvas"
             android:label="海天鹰电量监控 - 电量曲线"
             android:launchMode="standard"
             android:screenOrientation="portrait"/>
-        <service android:enabled="true" android:name="com.hty.batterymonitor.BatteryService" />
-        <service android:name="com.hty.batterymonitor.WidgetService" android:enabled="true" />
-        <receiver android:name="com.hty.batterymonitor.WidgetProvider" >
+
+        <service android:enabled="true" android:name=".BatteryService" />
+        <service android:name=".WidgetService" android:enabled="true" />
+        <receiver android:name=".WidgetProvider" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.intent.action.BATTERY_CHANGED" />
@@ -51,7 +47,9 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/monitor_widget_info" />
         </receiver>
+
     </application>
+
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-	<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>    
+	<!--<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>-->
 </manifest>
