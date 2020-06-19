@@ -36,15 +36,14 @@ import android.util.Log;
 
 public class BatteryService extends Service {
     final String fp = "/sys/class/power_supply/battery/";
-	int pluggedlast = 0, plugged, statuslast = -1, i = 0, cp, level0 = 0, level1 = 0, level2 = 0, lbs, le, lcs, lce, level;
+    final String fp1 = "/sys/class/power_supply/Battery/";	//华为Mate7
+	int pluggedlast = 0, plugged, statuslast = -1, i = 0, level0 = 0, level1 = 0, lbs, lcs, lce, level;
 	Date date, CST, CET, CFT, BCT, BST, BET, time0, time1;
-	long duration, CFD, BD, it0, tt0, uptime, BD1;
+	long duration, CFD, BD, uptime;
 	boolean paused = true;
-	String SCST = "", SCET = "", SCFT = "", SCFD = "", SD, s = "电量：", s1 = "充电计时：", SBD = "", SBST = "",	CPUs, stemperature, FPBST = "data/data/com.hty.batterymonitor/files/BST", SBP = "", SBET = "", SBFT = "";
+	String SCST = "", SCET = "", SCFT = "", SCFD = "", SD, s = "电量：", s1 = "充电计时：", SBD = "", SBST = "", stemperature, FPBST = "data/data/com.hty.batterymonitor/files/BST", SBP = "", SBET = "", SBFT = "";
 	SimpleDateFormat dateformat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
 	SimpleDateFormat timeformat = new SimpleDateFormat("H时m分s秒");
-	SimpleDateFormat timeformat1 = new SimpleDateFormat("HH:mm");
-	Timer timer;
 	float vl = 0, vlb = 0, vlc = 0;
 	CharSequence contentText;
 
@@ -52,7 +51,6 @@ public class BatteryService extends Service {
 	public void onCreate() {
 		DBHelper.getInstance(this);
 		timeformat.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
-
 	}
 
 	@Override
@@ -60,20 +58,7 @@ public class BatteryService extends Service {
 		IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
 		BatteryReceiver batteryReceiver = new BatteryReceiver();
 		registerReceiver(batteryReceiver, intentFilter);
-		// if (timer == null) {
-		// timer = new Timer();
-		// timer.scheduleAtFixedRate(new Refresh(), 0, 1000);
-		// }
 	}
-
-	// class Refresh extends TimerTask {
-	// @Override
-	// public void run() {
-	// // cp = CPUusage();
-	// // Log.e("CPU", cp + "%");
-	// MainApplication.setbmsg(s + "\n" + s1);
-	// }
-	// }
 
 	private final Handler handler = new Handler();
 	private final Runnable runnable = new Runnable() {
@@ -117,12 +102,12 @@ public class BatteryService extends Service {
 			plugged = intent.getIntExtra("plugged", 0);
             int BPCN = 0;
 			if (Build.VERSION.SDK_INT > 20) {
-				BatteryManager bm = (BatteryManager) getSystemService(Context.BATTERY_SERVICE);
-				int BPC = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
-				int BPCC = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER);
-				int BPCA = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_AVERAGE);
-				BPCN = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW);
-				int BPEC = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_ENERGY_COUNTER);
+				BatteryManager BM = (BatteryManager) getSystemService(Context.BATTERY_SERVICE);
+				int BPC = BM.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+				int BPCC = BM.getIntProperty(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER);
+				int BPCA = BM.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_AVERAGE);
+				BPCN = BM.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW);
+				int BPEC = BM.getIntProperty(BatteryManager.BATTERY_PROPERTY_ENERGY_COUNTER);
 				SBP = "\nBATTERY_PROPERTY_CAPACITY:" + BPC + "\nBATTERY_PROPERTY_CHARGE_COUNTER:" + BPCC + "\nBATTERY_PROPERTY_CURRENT_AVERAGE:" + BPCA + "\nBATTERY_PROPERTY_CURRENT_NOW:" + BPCN + "\nBATTERY_PROPERTY_ENERGY_COUNTER:" + BPEC;
 			}
 			String statusString = "";
@@ -134,10 +119,10 @@ public class BatteryService extends Service {
 				time0 = date;
 				level0 = level;
 				File file = new File(FPBST);
-				Log.e("File:BST.exists?", file.exists() + "");
+                Log.e(Thread.currentThread().getStackTrace()[2] + "", "File:BST.exists?" + file.exists());
 				if (file.exists()) {
 					String SBST = ReadFile1("BST");
-					Log.e("ReadFile:BST=", SBST);
+                    Log.e(Thread.currentThread().getStackTrace()[2] + "", "ReadFile:BST=" + SBST);
 					String[] bs = SBST.split(",");
 					if (bs.length > 2) {
 						lbs = Integer.parseInt(bs[1]);
@@ -146,7 +131,7 @@ public class BatteryService extends Service {
 					}
 					if (uptime < 300000)
 						lbs = level;
-					Log.e("Battery Start Level", lbs + "");
+                    Log.e(Thread.currentThread().getStackTrace()[2] + "", "Battery Start Level: " + lbs);
 					try {
 						BST = dateformat.parse(bs[0]);
 						BD = date.getTime() - BST.getTime();
@@ -188,7 +173,7 @@ public class BatteryService extends Service {
 				break;
 			case BatteryManager.BATTERY_STATUS_FULL:
 				statusString = "已充满";
-				Log.e("statuslast", statuslast + "");
+                Log.e(Thread.currentThread().getStackTrace()[2] + "", "StatusLast: " + statuslast);
 				if (statuslast != BatteryManager.BATTERY_STATUS_FULL && statuslast != -1) {
 					CFT = date;
 					SCFT = dateformat.format(CFT);
@@ -199,42 +184,12 @@ public class BatteryService extends Service {
 			}
 
 			// 电流
-            if(BPCN == 0) {
-                String scurrent = "0";
-                String fn = fp + "BatteryAverageCurrent";   // 红米1，金立GN205，佳域G3
-                File f = new File(fn);
-                if (f.exists()) {
-                    scurrent = ReadFile(fn);
-                } else {
-                    fn = fp + "batt_fuel_current";// 三星I8262D
-                    f = new File(fn);
-                    if (f.exists()) {
-                        scurrent = ReadFile(fn);
-                    } else {
-                        fn = fp + "batt_current";// HTC X315e
-                        f = new File(fn);
-                        if (f.exists()) {
-                            scurrent = ReadFile(fn);
-                        } else {    //MIUI7
-                            fn = fp + "current_now";
-                            f = new File(fn);
-                            if (f.exists()) {
-                                // NOTE8702
-                                // String c = ReadFile(fn);
-                                // scurrent = c.substring(0, c.length() - 3);
-                                // ZTE N958St
-                                scurrent = ReadFile(fn);
-                            }
-                        }
-                    }
-                }
-                if (scurrent == null) {
-                    scurrent = "0";
-                } else {
-                    Log.e("电流", fn + ": " + scurrent);
-                }
-                current = Integer.parseInt(scurrent);
-            }else{
+            if (BPCN == 0) {
+				current = getCurrentFromFile(fp);
+				if (current == -1) {
+					current = getCurrentFromFile(fp1);	//华为Mate7
+				}
+            } else {
 			    current = BPCN;
             }
             Log.e(Thread.currentThread().getStackTrace()[2] + "", "current_raw(" + current + ")");
@@ -245,19 +200,10 @@ public class BatteryService extends Service {
 
 			// 电量
 			String rls = "";
-			String fn = fp + "/charge_full_design";// 红米1
-			File f = new File(fn);
-            Log.e("电量", fn + ": " + String.valueOf(f.exists()));
-			if (f.exists()) {
-				String cfdm = ReadFile(fn);
-				if(cfdm != null) {
-                    Log.e("电量", cfdm);
-                    String cfd = cfdm.substring(0, cfdm.length() - 3);
-                    int cfdi = Integer.parseInt(cfd);
-                    int rln = cfdi * level / 100;
-                    rls = rln + "/" + cfd + "mAh";
-                }
-			}
+            int rln = getCapacityFromFile(fp);
+            if (rln == -1)
+            	rln = getCapacityFromFile(fp1);	//华为Mate7
+			rls = rln + "mAh";
 
 			String healthString = "";
 			switch (health) {
@@ -325,7 +271,7 @@ public class BatteryService extends Service {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				Log.e("WriteFile:BST=", sf);
+                Log.e(Thread.currentThread().getStackTrace()[2] + "", "WriteFile:BST=" + sf);
 			}
 			// 充电状态
 			if (plugged != 0) {
@@ -486,7 +432,7 @@ public class BatteryService extends Service {
 			return 0;
 		}
 		// Log.e("uptime", s);
-		long ms = new Double(Double.parseDouble(s.substring(0, s.indexOf(" "))) * 1000).longValue();
+		long ms = Double.valueOf(Double.parseDouble(s.substring(0, s.indexOf(" "))) * 1000).longValue();
 		return ms;
 	}
 
@@ -514,5 +460,56 @@ public class BatteryService extends Service {
 			st = LongToTime(ms) + "后" + FullTime + "充满";
 		}
 		return st;
+	}
+
+	int getCurrentFromFile(String path) {
+		String scurrent = "-1";
+		String filepath = path + "BatteryAverageCurrent";   // 红米1，金立GN205，佳域G3
+		File file = new File(filepath);
+		if (file.exists()) {
+			scurrent = ReadFile(filepath);
+		} else {
+			filepath = path + "batt_fuel_current";// 三星I8262D
+			file = new File(filepath);
+			if (file.exists()) {
+				scurrent = ReadFile(filepath);
+			} else {
+				filepath = path + "batt_current";// HTC X315e
+				file = new File(filepath);
+				if (file.exists()) {
+					scurrent = ReadFile(filepath);
+				} else {    //MIUI7，华为Mate7
+					filepath = path + "current_now";
+					file = new File(filepath);
+					if (file.exists()) {
+						scurrent = ReadFile(filepath);
+					}
+				}
+			}
+		}
+		if (scurrent == null) {
+			scurrent = "0";
+		} else {
+			Log.e(Thread.currentThread().getStackTrace()[2] + "", "电流: " + filepath + ": " + scurrent);
+		}
+		int current1 = Integer.parseInt(scurrent);
+		return current1;
+	}
+
+	int getCapacityFromFile(String path){
+		int icfd = -1;
+		String fn = path + "charge_full_design";
+		File f = new File(fn);
+		Log.e(Thread.currentThread().getStackTrace()[2] + "", "电量(" + fn + "): " + f.exists());
+		if (f.exists()) {
+			String scfd = ReadFile(fn);
+			if(scfd != null) {
+				Log.e(Thread.currentThread().getStackTrace()[2] + "", scfd);
+				if (scfd.length() > 4)	//小米4
+					scfd = scfd.substring(0, 4);
+				icfd = Integer.parseInt(scfd);
+			}
+		}
+		return icfd;
 	}
 }
