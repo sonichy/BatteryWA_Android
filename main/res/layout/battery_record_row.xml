@@ -8,13 +8,13 @@
 
     <TextView
         android:id="@+id/textView1"
-        android:layout_width="170dp"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:singleLine="true"
         android:text="2014年12月25日 00:00:00"
         android:textColor="#ffffff"
-        android:textSize="14dp"/>
+        android:textSize="14dp" />
 
     <TextView
         android:id="@+id/textView2"
@@ -41,13 +41,13 @@
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="40dp"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:gravity="right"
         android:singleLine="true"
-        android:text="-500"
+        android:text="-1000"
         android:textColor="#ffffff"
-        android:textSize="14dp"/>
+        android:textSize="14dp" />
 
     <TextView
         android:id="@+id/textView5"

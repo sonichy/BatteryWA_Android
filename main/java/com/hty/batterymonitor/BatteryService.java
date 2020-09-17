@@ -32,6 +32,7 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.util.Log;
 
 public class BatteryService extends Service {
@@ -114,7 +115,7 @@ public class BatteryService extends Service {
 			date = new Date();
 			BCT = date;
 			level1 = level;
-			uptime = getUptime();
+			uptime = SystemClock.elapsedRealtime();
 			if (i == 0) {
 				time0 = date;
 				level0 = level;
@@ -306,7 +307,7 @@ public class BatteryService extends Service {
 					+ stemperature + "°C\n材料：" + technology + "\n电池启用：" + SBST + "\n电池已用：" + SBD + "\n电池启电："
 					+ lbs + "%\n耗电速度：" + vlb + " 电量/小时\n" + SBET + "\n%1电量速度：" + vl + " 电量/小时\n起充电量：" + lcs
 					+ "%\n终充电量：" + lce + "%\n起充时间：" + SCST + "\n终充时间：" + SCET + "\n充满时间：" + SCFT + "\n充满时长："
-					+ SCFD + "\n充电速度：" + vlc + " 电量/小时\n" + SBFT + "\n开机时长：" + LongToTime(getUptime()) + SBP;
+					+ SCFD + "\n充电速度：" + vlc + " 电量/小时\n" + SBFT + "\n开机时长：" + LongToTime(uptime) + SBP;
 			// Message msg = new Message();
 			// Bundle b = new Bundle();
 			// b.putString("s", s);
@@ -412,28 +413,6 @@ public class BatteryService extends Service {
 		FileOutputStream fos = openFileOutput(filename, Context.MODE_PRIVATE);
 		fos.write(content.getBytes());
 		fos.close();
-	}
-
-	long getUptime() {
-		FileReader fr = null;
-		try {
-			fr = new FileReader("/proc/uptime");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return 0;
-		}
-		BufferedReader br = new BufferedReader(fr);
-		String s = "";
-		try {
-			s = br.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return 0;
-		}
-		// Log.e("uptime", s);
-		long ms = Double.valueOf(Double.parseDouble(s.substring(0, s.indexOf(" "))) * 1000).longValue();
-		return ms;
 	}
 
 	String LongToTime(long l) {

@@ -32,13 +32,16 @@ public class MyView extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		DisplayMetrics DM = getResources().getDisplayMetrics();
-		if (DM.heightPixels == 800)
-			canvas.scale(0.8f, 0.8f);
-		if (DM.heightPixels == 480)
-			canvas.scale(0.5f, 0.5f);
-		if (DM.heightPixels == 1920)
-			canvas.scale(1.3f, 1.3f);
+//		DisplayMetrics DM = getResources().getDisplayMetrics();
+//		Log.e(Thread.currentThread().getStackTrace()[2] + "", DM.heightPixels + "");
+//		if (DM.heightPixels <= 480)
+//			canvas.scale(0.5f, 0.5f);
+//		else if (DM.heightPixels <= 800)
+//			canvas.scale(0.8f, 0.8f);
+//		else if (DM.heightPixels <= 1920)
+//			canvas.scale(1.3f, 1.3f);
+//		else
+//			canvas.scale(1.5f, 1.5f);
 		Paint paint = new Paint();
 		// paint.setStyle(Paint.Style.STROKE);
 		paint.setStyle(Paint.Style.FILL);
@@ -63,7 +66,6 @@ public class MyView extends View {
 			float[] x = new float[cc];
 			int[] current = new int[cc];
 			int[] voltage = new int[cc];
-			// int[] cpu = new int[cc];
 			lpts = new float[cc * 4];
 			cpts = new float[cc * 4];
 			vpts = new float[cc * 4];
@@ -72,17 +74,14 @@ public class MyView extends View {
 			level[0] = cursor.getInt(cursor.getColumnIndex("level"));
 			current[0] = cursor.getInt(cursor.getColumnIndex("current"));
 			voltage[0] = cursor.getInt(cursor.getColumnIndex("voltage"));
-			// cpu[0] = cursor.getInt(cursor.getColumnIndex("cpu"));
 			x[0] = xo;
 			try {
 				date[0] = sdf.parse(time[0]);
 			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 				try {
 					date[0] = sdf2.parse(time[0]);
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -95,16 +94,13 @@ public class MyView extends View {
 				level[i] = cursor.getInt(cursor.getColumnIndex("level"));
 				current[i] = cursor.getInt(cursor.getColumnIndex("current"));
 				voltage[i] = cursor.getInt(cursor.getColumnIndex("voltage"));
-				// cpu[i] = cursor.getInt(cursor.getColumnIndex("cpu"));
 				try {
 					date[i] = sdf.parse(time[i]);
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					try {
 						date[i] = sdf2.parse(time[i]);
 					} catch (ParseException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
