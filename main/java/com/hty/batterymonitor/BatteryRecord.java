@@ -31,7 +31,6 @@ public class BatteryRecord extends Activity {
 	private final SimpleCursorAdapter.ViewBinder viewBinder = new SimpleCursorAdapter.ViewBinder() {
 		@Override
 		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-			// TODO Auto-generated method stub
 			if (cursor.getColumnIndex("temperature") == columnIndex) {
 				TextView tv = (TextView) view;
 				tv.setText("" + cursor.getInt(columnIndex) / 10.0);
@@ -65,4 +64,5 @@ public class BatteryRecord extends Activity {
 		}
 		return true;
 	}
+
 }

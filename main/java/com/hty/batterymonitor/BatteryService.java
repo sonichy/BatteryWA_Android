@@ -479,7 +479,7 @@ public class BatteryService extends Service {
 		int icfd = -1;
 		String fn = path + "charge_full_design";
 		File f = new File(fn);
-		Log.e(Thread.currentThread().getStackTrace()[2] + "", "电量(" + fn + "): " + f.exists());
+		//Log.e(Thread.currentThread().getStackTrace()[2] + "", "电量(" + fn + "): " + f.exists());
 		if (f.exists()) {
 			String scfd = ReadFile(fn);
 			if(scfd != null) {

@@ -27,21 +27,13 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		tv1 = (TextView) findViewById(R.id.textView1);
 		tv2 = (TextView) findViewById(R.id.textView2);
-		if (!isServiceRunning("com.hty.batterymonitor.BatteryService")) {
+		Log.e(Thread.currentThread().getStackTrace()[2] + "", "MainActivity.onCreate()");
+		//Log.e(Thread.currentThread().getStackTrace()[2] + "", getPackageName());
+		if (!isServiceRunning(getPackageName() + ".BatteryService")) {
 			startService(new Intent(this, BatteryService.class));
 		}
 		handler.postDelayed(runnable, 1000);
 		tv2.setText("");
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
 	}
 
 	@Override
@@ -88,9 +80,7 @@ public class MainActivity extends Activity {
 				startActivity(new Intent(MainActivity.this, BatteryRecord.class));
 				break;
 			case 4:
-				Intent intent = new Intent(MainActivity.this, BatteryCanvas.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(intent);
+				startActivity(new Intent(MainActivity.this, BatteryCanvas.class));
 				break;
 			case 5:
 				String s = readFile("/sys/class/power_supply/battery/uevent");

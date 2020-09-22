@@ -85,7 +85,7 @@ public class MyView extends View {
 					e.printStackTrace();
 				}
 			}
-			Log.e("time->date", time[0] + "->" + sdf.format(date[0]));
+			Log.e(Thread.currentThread().getStackTrace()[2] + "", "time->date: " + time[0] + "->" + sdf.format(date[0]));
 			int idmax = cursor.getInt(cursor.getColumnIndex("_id"));
 			MainApplication.setId(cursor.getInt(cursor.getColumnIndex("_id")) - 20000);
 			int i = 1;

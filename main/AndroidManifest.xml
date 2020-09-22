@@ -5,7 +5,6 @@
     android:versionName="7.10" >
 
     <application
-        android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="海天鹰电量监控"
         android:theme="@android:style/Theme.Holo" >
@@ -13,7 +12,6 @@
         <activity
             android:name=".MainActivity"
             android:label="海天鹰电量监控"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,13 +21,11 @@
 
   	    <activity
             android:name=".BatteryRecord"
-            android:label="海天鹰电量监控 - 历史数据"
-            android:launchMode="singleTask" />
+            android:label="电量记录"/>
 
   	    <activity
             android:name=".BatteryCanvas"
-            android:label="海天鹰电量监控 - 电量曲线"
-            android:launchMode="standard"
+            android:label="电量曲线"
             android:screenOrientation="portrait"/>
 
         <service android:enabled="true" android:name=".BatteryService" />
